@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fridge Keeper</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Fridge Keeper</h1>
+    <p class="subtitle">Track what you buy, use it before it spoils, and decide what to cook.</p>
+    <nav>
+      <button class="tab active" data-tab="pantry">My Ingredients</button>
+      <button class="tab" data-tab="cook">Cook Today</button>
+      <button class="tab" data-tab="plan">Meal Plan</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ===== Ingredients ===== -->
+    <section id="pantry" class="panel active">
+      <form id="add-form" class="card">
+        <h2>Add groceries</h2>
+        <div class="grid">
+          <label>Ingredient
+            <input id="f-name" list="known-ingredients" required placeholder="e.g. tomato, 豆腐">
+            <datalist id="known-ingredients"></datalist>
+          </label>
+          <label>Amount
+            <input id="f-qty" placeholder="e.g. 4, 500 g, 1 bunch">
+          </label>
+          <label>Bought on
+            <input id="f-bought" type="date" required>
+          </label>
+          <label>Store in
+            <select id="f-storage">
+              <option value="fridge">Fridge</option>
+              <option value="freezer">Freezer</option>
+              <option value="pantry">Pantry / counter</option>
+            </select>
+          </label>
+          <label>Use by
+            <input id="f-expires" type="date" required>
+          </label>
+        </div>
+        <p id="f-hint" class="hint"></p>
+        <button type="submit" class="primary">Add</button>
+      </form>
+
+      <div class="card">
+        <div class="toolbar">
+          <h2>In stock</h2>
+          <div class="filters">
+            <select id="filter-storage">
+              <option value="all">All locations</option>
+              <option value="fridge">Fridge</option>
+              <option value="freezer">Freezer</option>
+              <option value="pantry">Pantry</option>
+            </select>
+          </div>
+        </div>
+        <div id="summary" class="summary"></div>
+        <ul id="inventory" class="inventory"></ul>
+        <div class="io">
+          <button id="export-btn">Export backup</button>
+          <label class="file-btn">Import backup<input id="import-file" type="file" accept="application/json" hidden></label>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Cook today ===== -->
+    <section id="cook" class="panel">
+      <div class="card">
+        <h2>What should I cook today?</h2>
+        <p class="hint">Recipes are ranked by what you have, with ingredients that expire soon counting most.
+          Basics like oil, salt and soy sauce are assumed to be in your kitchen.</p>
+        <label class="inline"><input type="checkbox" id="only-complete"> Only show recipes I can make right now</label>
+        <ul id="suggestions" class="recipes"></ul>
+      </div>
+    </section>
+
+    <!-- ===== Meal plan ===== -->
+    <section id="plan" class="panel">
+      <div class="card">
+        <h2>Meal plan</h2>
+        <p class="hint">Gives each day a recipe so that ingredients get used before they expire.
+          Each item goes to only one meal.</p>
+        <label class="inline">Plan for
+          <select id="plan-days">
+            <option>3</option><option selected>5</option><option>7</option>
+          </select> days
+        </label>
+        <ol id="plan-list" class="plan"></ol>
+        <div id="plan-leftover"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Dialog shown after cooking: pick which items were used up -->
+  <dialog id="cook-dialog">
+    <form method="dialog">
+      <h3 id="cook-title"></h3>
+      <p>Which ingredients did you use up?</p>
+      <ul id="cook-items" class="checklist"></ul>
+      <menu>
+        <button value="cancel">Cancel</button>
+        <button value="confirm" class="primary">Done</button>
+      </menu>
+    </form>
+  </dialog>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
